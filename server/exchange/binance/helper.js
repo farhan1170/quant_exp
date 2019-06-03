@@ -12,12 +12,13 @@ let currencyResponseParserAndObjectCreatorBinance = function (httpResponse, exch
   if(!httpResponseObject.symbols){
     return
   }
-  let currencyPairs = [];
+  let currencyPairs = {};
   httpResponseObject.symbols.forEach( (eachSymbolPair)=>{
     let currencyPairSkeleton = commonObjectCreators.currencyCommonObjectFunction();
     currencyPairSkeleton.exchangeName = exchangeName;
     currencyPairSkeleton.baseSymbol = eachSymbolPair.baseAsset;
     currencyPairSkeleton.quoteSymbol = eachSymbolPair.quoteAsset;
+    currencyPairSkeleton.id = exchangeName+'-'+currencyPairSkeleton.baseSymbol+'-'+currencyPairSkeleton.quoteSymbol
     eachSymbolPair.filters.forEach( (filterItem)=>{
       if(filterItem.filterType === 'LOT_SIZE'){
         currencyPairSkeleton.lot = {
@@ -43,7 +44,7 @@ let currencyResponseParserAndObjectCreatorBinance = function (httpResponse, exch
       precisionValue: eachSymbolPair.quotePrecision
     };
     currencyPairSkeleton.orderTypes = eachSymbolPair.orderTypes;
-    currencyPairs.push(currencyPairSkeleton);
+    currencyPairs[currencyPairSkeleton.id] = currencyPairSkeleton;
   })
   return currencyPairs; 
 }

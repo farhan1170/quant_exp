@@ -10,12 +10,13 @@ let currencyResponseParserAndObjectCreatorCEX = function (httpResponse, exchange
   if(!httpResponseObject.data.pairs || !httpResponseObject.data.pairs.length){
     return
   }
-  let currencyPairs = [];
+  let currencyPairs = {};
   httpResponseObject.data.pairs.forEach( (eachSymbolPair)=>{
     let currencyPairSkeleton = commonObjectCreators.currencyCommonObjectFunction();
     currencyPairSkeleton.exchangeName = exchangeName;
     currencyPairSkeleton.baseSymbol = eachSymbolPair.symbol1;
     currencyPairSkeleton.quoteSymbol = eachSymbolPair.symbol2;
+    currencyPairSkeleton.id = exchangeName+'-'+currencyPairSkeleton.baseSymbol+'-'+currencyPairSkeleton.quoteSymbol
     currencyPairSkeleton.lot = {
       active: true,
       minLotSize: eachSymbolPair.minLotSize,
@@ -26,7 +27,7 @@ let currencyResponseParserAndObjectCreatorCEX = function (httpResponse, exchange
       minPrice: eachSymbolPair.minPrice,
       maxPrice: eachSymbolPair.maxPrice
     }
-    currencyPairs.push(currencyPairSkeleton);
+    currencyPairs[currencyPairSkeleton.id] = currencyPairSkeleton;
   })
   return currencyPairs; 
 }

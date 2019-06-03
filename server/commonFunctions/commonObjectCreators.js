@@ -4,26 +4,27 @@ const external = require('external'),
 module.exports = {
   currencyCommonObjectFunction : function () {
     return {
-      exchangeName: '',
-      baseSymbol: '',
-      quoteSymbol: '',
+      id: null,
+      exchangeName: null,
+      baseSymbol: null,
+      quoteSymbol: null,
       lot: {
         active: false,
-        minLotSize: 0,
-        maxLotSize: 0
+        minLotSize: null,
+        maxLotSize: null
       },
       priceRange: {
         active: false,
-        minPrice: 0,
-        maxPrice: 0
+        minPrice: null,
+        maxPrice: null
       },
       baseSymbolPrecision: {
         active: false,
-        precisionValue: 0
+        precisionValue: null
       },
       quoteSymbolPrecision: {
         active: false,
-        precisionValue: 0
+        precisionValue: null
       },
       orderTypes: {
         active: false,
