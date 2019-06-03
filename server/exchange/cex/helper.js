@@ -1,6 +1,12 @@
 const commonFunctions = require('commonFunctions'),
   commonObjectCreators = commonFunctions.commonObjectCreators;
 
+
+const obserbers = require('observers'),
+      rawDataObservers = observers.rawDataObservers,
+      currencyAndPairs = rawDataObservers.currencyAndPairs;
+
+
 let currencyResponseParserAndObjectCreatorCEX = function (httpResponse, exchangeName) {
   let httpResponseObject = JSON.parse(httpResponse);
   //check timezone
@@ -40,7 +46,7 @@ module.exports = {
     if(requestObj.url){
       let httpResponse = await commonObjectCreators.requestor(requestObj);
       let currencyPairs = currencyResponseParserAndObjectCreatorCEX(httpResponse, exchangeName);
-      console.log('cex currencyPairs*****',currencyPairs)
+      currencyAndPairs.currencyAndPairObserver(currencyPairs);
     }
   }  
 }

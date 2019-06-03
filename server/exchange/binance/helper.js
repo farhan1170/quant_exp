@@ -1,6 +1,9 @@
 const commonFunctions = require('commonFunctions'),
   commonObjectCreators = commonFunctions.commonObjectCreators;
 
+const observers = require('observers'),
+      rawDataObservers = observers.rawDataObservers,
+      currencyAndPairs = rawDataObservers.currencyAndPairs;
 
 
 let currencyResponseParserAndObjectCreatorBinance = function (httpResponse, exchangeName) {
@@ -57,7 +60,8 @@ module.exports = {
     if(requestObj.url){
       let httpResponse = await commonObjectCreators.requestor(requestObj);
       let currencyPairs = currencyResponseParserAndObjectCreatorBinance(httpResponse, exchangeName);
-      console.log('currencyPairs binance***************',currencyPairs)
+      //console.log('currencyPairs binance***************',currencyPairs)
+      currencyAndPairs.currencyAndPairObserver(currencyPairs);
     }
   }  
 }
