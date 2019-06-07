@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/farhan1170/quant_exp/issues"
   },
-  "homepage": "https://github.com/farhan1170/quant_exp#readme"
+  "homepage": "https://github.com/farhan1170/quant_exp#readme",
+  "dependencies": {
+    "bluebird": "^3.5.5",
+    "lodash": "^4.17.11",
+    "request": "^2.88.0"
+  }
 }
