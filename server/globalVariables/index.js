@@ -1,4 +1,4 @@
 module.exports = {
-  basicdata: require('./basicdata'),
+  basicData: require('./basicData'),
   technicals: require('./technicals')
 }

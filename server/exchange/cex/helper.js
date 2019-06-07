@@ -2,7 +2,7 @@ const commonFunctions = require('commonFunctions'),
   commonObjectCreators = commonFunctions.commonObjectCreators;
 
 
-const obserbers = require('observers'),
+const observers = require('observers'),
       rawDataObservers = observers.rawDataObservers,
       currencyAndPairs = rawDataObservers.currencyAndPairs;
 

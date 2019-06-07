@@ -1,23 +1,34 @@
 const external = require('external'),
-      globalvariables = external.globalvariables,
-      rawDataSaver = 
+      globalVariableSaver = external.globalVariableSaver,
+      rawDataSaver = globalVariableSaver.rawDataSaver;
 
 let currencyListCreator = function (currencyPairs) {
   let currencyList = [];
   Object.keys(currencyPairs).forEach( (currencyItem)=>{
     currencyList.push(currencyItem);
   })
+  return currencyList;
 }
-let pairSaver = function (currencyList) {
+let currencySaver = function (currencyList) {
   //if data not in list
   //save data
+  currencyList.forEach((item)=>{
+    rawDataSaver.addNewCurrency(item);
+  })
+}
+
+let pairSaver = function (currencyPairs) {
+  Object.keys(currencyPairs).forEach((item)=>{
+    rawDataSaver.addNewPair(currencyPairs[item]);
+  })
 }
 
 module.exports = {
   currencyAndPairObserver : function (currencyPairs) {
     let currencyList = currencyListCreator(currencyPairs);
-    let pairListCreator = currencyPairs;
     //observed functions
-    
+    currencySaver(currencyList);
+    pairSaver(currencyPairs);
+
   }
 }

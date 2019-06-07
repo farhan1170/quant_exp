@@ -1,6 +1,7 @@
 const exchange = require('exchange');
 const config = require('config');
 const external = require('external');
+const globalVariables = require('globalVariables');
 
 
 var CronJob = require('cron').CronJob;
@@ -18,9 +19,23 @@ let getAllExchangeNames = function () {
 
 let trigger = function () {
   let allExchanges = getAllExchangeNames();
+  let timeOutDuration = 24*60*60;
   allExchanges.forEach( (exchangeName)=>{
     exchange[exchangeName].helper.commonCurrencyExtension(exchangeName);
   })
+
+  setInterval(function () {
+    console.log('nvhbvjhvbhjvbjhvjhvebjhvbhjbhjwjegevwjh----------------')
+    allExchanges.forEach( (exchangeName)=>{
+    exchange[exchangeName].helper.commonCurrencyExtension(exchangeName);
+  })  
+  }, 24*3600*1000);
+
+  // setInterval(function () {
+  //   console.log('commonCurrencyExtension*******************',JSON.stringify(globalVariables.basicData.currencies.currencies))
+  //   console.log('commonCurrencyPair*******************',JSON.stringify(globalVariables.basicData.pairs.pairs))    
+  // },10000)
+  
 }
 
 

@@ -1,3 +1,3 @@
 module.exports = {
-  currencies : null;
+  currencies : null
 }

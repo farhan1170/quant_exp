@@ -54,7 +54,7 @@ let currencyResponseParserAndObjectCreatorBinance = function (httpResponse, exch
 
 
 module.exports = {
-  commonCurrencyExtension:async  function (exchangeName) {
+  commonCurrencyExtension: async  function (exchangeName) {
     let requestObj = {};
     requestObj = commonObjectCreators.currencyObjectCreator (exchangeName);
     if(requestObj.url){
