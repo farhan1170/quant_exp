@@ -1,20 +1,29 @@
+const config = require('config');
 const exchange = require('exchange');
-
 var CronJob = require('cron').CronJob;
+const commonFunctions = require('commonFunctions'),
+      commonObjectCeators = commonFunctions.commonObjectCeators;
 
-Object.keys(exchange).forEach(  (exchangeName)=> {
-  console.log(exchangeName,'***errrrrrr*************',exchange[exchangeName].dataRequestor.rest.ticker)
-  exchange[exchangeName].dataRequestor.rest.ticker.makeRequest;
-}) 
+
+
+let getAllExchangeNames = function () {
+  let exchangeNames = [];
+  config.exchanges.forEach( (exchange)=>{
+    Object.keys(exchange).forEach( (exchangeName)=>{
+      exchangeNames.push(exchangeName)
+    })
+  })
+  return exchangeNames;
+}
+
 
 let triggerTickers = function () {
-  
+  getAllExchangeNames().forEach((exchangeName)=>{
+    exchange[exchangeName].helper.commonTriggerExtension(exchangeName);
+  })
 }
 
 
 module.exports = {
-  getAllTickers : new CronJob('* * * * * *', function() {
-    console.log('You will see this message every second');
-  }, null, true, 'America/Los_Angeles');
-
+  trigger: triggerTickers()
 }

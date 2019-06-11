@@ -25,7 +25,6 @@ let trigger = function () {
   })
 
   setInterval(function () {
-    console.log('nvhbvjhvbhjvbjhvjhvebjhvbhjbhjwjegevwjh----------------')
     allExchanges.forEach( (exchangeName)=>{
     exchange[exchangeName].helper.commonCurrencyExtension(exchangeName);
   })  

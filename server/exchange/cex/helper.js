@@ -38,6 +38,17 @@ let currencyResponseParserAndObjectCreatorCEX = function (httpResponse, exchange
   return currencyPairs; 
 }
 
+var tickerResponseParserAndObjectCreatorCex = function (httpResponse) {
+  let httpResponseObject = JSON.parse(httpResponse);
+  //check timezone
+  if(!httpResponseObject.e || !httpResponseObject.ok || !httpResponseObject.data || !httpResponseObject.e === "tickers" ||!httpResponseObject.ok === "ok" ){
+    return;
+  }
+  if(!httpResponseObject.data.pairs || !httpResponseObject.data.pairs.length){
+    return
+  }
+  
+}
 
 module.exports = {
   commonCurrencyExtension: async function (exchangeName) {
@@ -48,5 +59,15 @@ module.exports = {
       let currencyPairs = currencyResponseParserAndObjectCreatorCEX(httpResponse, exchangeName);
       currencyAndPairs.currencyAndPairObserver(currencyPairs);
     }
+  },
+  commonTriggerExtension: function(exchangeName){
+    let interval = setInterval(async function () {
+      let requestObj = {};
+      requestObj = commonObjectCreators.tickerObjectCreator(exchangeName);
+      if(requestObj.url){
+        let httpResponse = await commonObjectCreators.requestor(requestObj);
+        let ticker = tickerResponseParserAndObjectCreatorCex(httpResponse);
+      }
+    },5000)
   }  
 }

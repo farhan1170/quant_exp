@@ -1,3 +1,4 @@
 module.exports = {
-  currencies : null
+  currencies : null,
+  cexBaseCurrencies: null
 }

@@ -6,6 +6,8 @@ const observers = require('observers'),
       currencyAndPairs = rawDataObservers.currencyAndPairs;
 
 
+
+
 let currencyResponseParserAndObjectCreatorBinance = function (httpResponse, exchangeName) {
   let httpResponseObject = JSON.parse(httpResponse);
   //check timezone
@@ -53,6 +55,11 @@ let currencyResponseParserAndObjectCreatorBinance = function (httpResponse, exch
 }
 
 
+var tickerResponseParserAndObjectCreatorBinance = function (httpResponse) {
+  console.log('+++binHttp response+++++++++',JSON.parse(httpResponse)[0])
+}
+
+
 module.exports = {
   commonCurrencyExtension: async  function (exchangeName) {
     let requestObj = {};
@@ -63,5 +70,15 @@ module.exports = {
       //console.log('currencyPairs binance***************',currencyPairs)
       currencyAndPairs.currencyAndPairObserver(currencyPairs);
     }
+  },
+  commonTriggerExtension:  function(exchangeName){
+    let interval = setInterval(async function () {
+      let requestObj = {};
+      requestObj = commonObjectCreators.tickerObjectCreator(exchangeName);
+      if(requestObj.url){
+        let httpResponse = await commonObjectCreators.requestor(requestObj);
+        let ticker = tickerResponseParserAndObjectCreatorBinance(httpResponse);
+      }
+    },5000)
   }  
 }

@@ -3,7 +3,8 @@ let exchangeConfig = {
   active: true,
   rest: {
     baseUrl: 'https://api.binance.com',
-    currencyExtension: '/api/v1/exchangeInfo'
+    currencyExtension: '/api/v1/exchangeInfo',
+    tickerExtension: '/api/v3/ticker/price'
   }
 }
 
