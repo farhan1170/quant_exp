@@ -20,6 +20,9 @@ let currencySaver = function (currencyList) {
 let pairSaver = function (currencyPairs) {
   Object.keys(currencyPairs).forEach((item)=>{
     rawDataSaver.addNewPair(currencyPairs[item]);
+    if(currencyPairs[item].exchangeName === 'binance'){
+      rawDataSaver.addBinanceReversePair(currencyPairs[item]);
+    }
   })
 }
 

@@ -3,13 +3,18 @@ const commonFunctions = require('commonFunctions'),
 
 const observers = require('observers'),
       rawDataObservers = observers.rawDataObservers,
-      currencyAndPairs = rawDataObservers.currencyAndPairs;
+      currencyAndPairs = rawDataObservers.currencyAndPairs,
+      tickerObserver = rawDataObservers.tickerObserver;
+
+const globalVariables = require('globalVariables'),
+      basicData = globalVariables.basicData,
+      pairs = basicData.pairs;
 
 
 
 
 let currencyResponseParserAndObjectCreatorBinance = function (httpResponse, exchangeName) {
-  let httpResponseObject = JSON.parse(httpResponse);
+  let httpResponseObject = JSON.parse(httpResponse.body);
   //check timezone
   if(!httpResponseObject.timezone || !httpResponseObject.serverTime || !httpResponseObject.timezone === 'UTC'){
     return;
@@ -55,8 +60,35 @@ let currencyResponseParserAndObjectCreatorBinance = function (httpResponse, exch
 }
 
 
-var tickerResponseParserAndObjectCreatorBinance = function (httpResponse) {
-  console.log('+++binHttp response+++++++++',JSON.parse(httpResponse)[0])
+var tickerResponseParserAndObjectCreatorBinance = function (exchangeName, httpResponse) {
+  let httpResponseObject = null;
+  let timeStampOfReq = Number(httpResponse.timeStampOfReq);
+
+  try{
+    httpResponseObject = JSON.parse(httpResponse.body)
+
+  }
+  catch(error){
+    console.log('error in binance  ticker',error);
+    return;
+  }
+
+  httpResponseObject.forEach((item)=>{
+    let currencyPairSkeleton = commonObjectCreators.tickerCommonObjectFunction();
+    let baseQuote = item.symbol.split(':')
+    currencyPairSkeleton.baseSymbol= pairs.binanceReversePair[item.symbol].baseSymbol;
+    currencyPairSkeleton.quoteSymbol= pairs.binanceReversePair[item.symbol].quoteSymbol;
+    currencyPairSkeleton.timeStamp= timeStampOfReq;
+    currencyPairSkeleton.bidPrice= item.bidPrice;
+    currencyPairSkeleton.askPrice= item.askPrice;
+    currencyPairSkeleton.bidVolume= item.bidVolume;
+    currencyPairSkeleton.askVolume= item.askVolume;
+    currencyPairSkeleton.exchange  = exchangeName;
+    currencyPairSkeleton.key =  exchangeName+'-'+currencyPairSkeleton.baseSymbol+'-'+currencyPairSkeleton.quoteSymbol;
+    tickerObserver.tickerObserver(currencyPairSkeleton);
+  })
+  
+  
 }
 
 
@@ -77,7 +109,7 @@ module.exports = {
       requestObj = commonObjectCreators.tickerObjectCreator(exchangeName);
       if(requestObj.url){
         let httpResponse = await commonObjectCreators.requestor(requestObj);
-        let ticker = tickerResponseParserAndObjectCreatorBinance(httpResponse);
+        let ticker = tickerResponseParserAndObjectCreatorBinance(exchangeName, httpResponse);
       }
     },5000)
   }  

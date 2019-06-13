@@ -2,6 +2,6 @@ module.exports = {
   currencies: require('./currencies'),
   orderbook: require('./orderbook'),
   pairs: require('./pairs'),
-  tiker: require('./ticker'),
+  ticker: require('./ticker'),
   trade: require('./trade')
 }

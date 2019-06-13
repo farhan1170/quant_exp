@@ -30,10 +30,10 @@ let trigger = function () {
   })  
   }, 24*3600*1000);
 
-  // setInterval(function () {
-  //   console.log('commonCurrencyExtension*******************',JSON.stringify(globalVariables.basicData.currencies.currencies))
-  //   console.log('commonCurrencyPair*******************',JSON.stringify(globalVariables.basicData.pairs.pairs))    
-  // },10000)
+  setInterval(function () {
+    //console.log('commonCurrencyExtension*******************',JSON.stringify(globalVariables.basicData.currencies.currencies))
+    console.log('commonCurrencyPair*******************',JSON.stringify(globalVariables.basicData.ticker.ticker))    
+  },10000)
   
 }
 

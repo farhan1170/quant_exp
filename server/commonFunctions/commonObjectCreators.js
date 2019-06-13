@@ -34,7 +34,15 @@ module.exports = {
   },
   tickerCommonObjectFunction: function () {
     return {
-
+      baseSymbol: null,
+      quoteSymbol: null,
+      timeStamp: null,
+      bidPrice: null,
+      askPrice: null,
+      bidVolume: null,
+      askVolume: null,
+      exchange: null,
+      key: null
     }
   },
   depthCommonObjectFunction: function () {

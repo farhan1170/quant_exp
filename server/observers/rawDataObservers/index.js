@@ -1,3 +1,4 @@
 module.exports = {
-  currencyAndPairs: require('./currencyAndPairs')
+  currencyAndPairs: require('./currencyAndPairs'),
+  tickerObserver: require('./tickerObserver')
 }

@@ -15,11 +15,17 @@ module.exports = {
       if(!basicData.currencies.cexBaseCurrencies){
         basicData.currencies.cexBaseCurrencies = [];
       }
-      if(basicData.currencies.cexBaseCurrencies.indexOf(splitter[2]) <0 ){
+      if(basicData.currencies.cexBaseCurrencies.indexOf(splitter[2]) < 0 ){
         basicData.currencies.cexBaseCurrencies.push(splitter[2]); 
       }
     }
     return basicData.currencies.currencies
+  },
+  addBinanceReversePair: function(pairObj){
+    basicData.pairs.binanceReversePair[pairObj.baseSymbol+pairObj.quoteSymbol] = {
+      baseSymbol: pairObj.baseSymbol,
+      quoteSymbol: pairObj.quoteSymbol
+    }
   },
   getAllPairs: function () {
     return basicData.pairs.pairs;
@@ -29,5 +35,15 @@ module.exports = {
       basicData.pairs.pairs[pairObj.id] = pairObj;
     }
     return basicData.pairs.pairs;
+  },
+  addTicker: function (tickerObj) {
+      basicData.ticker.ticker[tickerObj.key] = tickerObj;
+  },
+  getTicker: function (key) {
+    if(key){
+      return basicData.ticker.ticker[tickerObj[key]]
+    }else{
+      return basicData.ticker.ticker
+    }
   }
 }

@@ -4,7 +4,7 @@ let exchangeConfig = {
   rest: {
     baseUrl: 'https://api.binance.com',
     currencyExtension: '/api/v1/exchangeInfo',
-    tickerExtension: '/api/v3/ticker/price'
+    tickerExtension: '/api/v3/ticker/bookTicker'
   }
 }
 

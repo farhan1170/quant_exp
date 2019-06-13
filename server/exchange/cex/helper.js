@@ -4,11 +4,20 @@ const commonFunctions = require('commonFunctions'),
 
 const observers = require('observers'),
       rawDataObservers = observers.rawDataObservers,
-      currencyAndPairs = rawDataObservers.currencyAndPairs;
+      currencyAndPairs = rawDataObservers.currencyAndPairs,
+      tickerObserver = rawDataObservers.tickerObserver;
+
 
 
 let currencyResponseParserAndObjectCreatorCEX = function (httpResponse, exchangeName) {
-  let httpResponseObject = JSON.parse(httpResponse);
+  let httpResponseObject = null;
+  try{
+    httpResponseObject = JSON.parse(httpResponse.body)  
+  }
+  catch(error){
+    console.log('error in cex currencyPairs',error);
+    return;
+  }
   //check timezone
   if(!httpResponseObject.e || !httpResponseObject.ok || !httpResponseObject.data || !httpResponseObject.e === "currency_limits" ||!httpResponseObject.ok === "ok" ){
     return;
@@ -38,15 +47,38 @@ let currencyResponseParserAndObjectCreatorCEX = function (httpResponse, exchange
   return currencyPairs; 
 }
 
-var tickerResponseParserAndObjectCreatorCex = function (httpResponse) {
-  let httpResponseObject = JSON.parse(httpResponse);
-  //check timezone
-  if(!httpResponseObject.e || !httpResponseObject.ok || !httpResponseObject.data || !httpResponseObject.e === "tickers" ||!httpResponseObject.ok === "ok" ){
+var tickerResponseParserAndObjectCreatorCex = function (exchangeName, httpResponse) {
+  
+ let httpResponseObject = null;
+  try{
+    httpResponseObject = JSON.parse(httpResponse.body)  
+  }
+  catch(error){
+    console.log('error in cex currencyPairs',error);
     return;
   }
-  if(!httpResponseObject.data.pairs || !httpResponseObject.data.pairs.length){
+  //check timezone
+  if(!httpResponseObject.e || !httpResponseObject.ok || !httpResponseObject.data || !httpResponseObject.e === "currency_limits" ||!httpResponseObject.ok === "ok" ){
+    return;
+  }
+  if(!httpResponseObject.data || !httpResponseObject.data.length){
     return
   }
+  //console.log('cex helper',httpResponseObject.data[0])
+  httpResponseObject.data.forEach((item)=>{
+    let currencyPairSkeleton = commonObjectCreators.tickerCommonObjectFunction();
+    let baseQuote = item.pair.split(':');
+    currencyPairSkeleton.baseSymbol= baseQuote[0];
+    currencyPairSkeleton.quoteSymbol= baseQuote[1];
+    currencyPairSkeleton.timeStamp= item.timestamp;
+    currencyPairSkeleton.bidPrice= item.bid;
+    currencyPairSkeleton.askPrice= item.ask;
+    currencyPairSkeleton.bidVolume= null;
+    currencyPairSkeleton.askVolume = null;
+    currencyPairSkeleton.exchange  = exchangeName;
+    currencyPairSkeleton.key =  exchangeName+'-'+baseQuote[0]+'-'+baseQuote[1];
+    tickerObserver.tickerObserver(currencyPairSkeleton);
+  })
   
 }
 
@@ -66,7 +98,7 @@ module.exports = {
       requestObj = commonObjectCreators.tickerObjectCreator(exchangeName);
       if(requestObj.url){
         let httpResponse = await commonObjectCreators.requestor(requestObj);
-        let ticker = tickerResponseParserAndObjectCreatorCex(httpResponse);
+        let ticker = tickerResponseParserAndObjectCreatorCex(exchangeName, httpResponse);
       }
     },5000)
   }  
